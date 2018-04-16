@@ -61,11 +61,6 @@ namespace HeatDev.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!await accountService.PasswordIsValid(userData.Login, userData.Password))
-            {
-                return BadRequest("wrong login or password");
-            }
-
             User user = await accountService.SignInUserAsync(userData);
             if (user == null)
             {
@@ -82,12 +77,12 @@ namespace HeatDev.Controllers
         [ProducesResponseType(typeof(TokenVM), 200)]
         public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
         {
-            if (!ValidateRerfreshToken(refreshToken))
+            int userId = GetUserIdFromToken(refreshToken);
+
+            if (!await ValidateRerfreshTokenAsync(userId, refreshToken))
             {
                 return BadRequest("invalid token. need to sign in");
             }
-
-            int userId = GetUserIdFromToken(refreshToken);
 
             User user = await accountService.FindUserByIdAsync(userId);
             if (user == null)
@@ -104,12 +99,12 @@ namespace HeatDev.Controllers
         [HttpDelete("token")]
         public async Task<IActionResult> InvalidateToken([FromBody] string refreshToken)
         {
-            if (!ValidateRerfreshToken(refreshToken))
+            int userId = GetUserIdFromToken(refreshToken);
+
+            if (!await ValidateRerfreshTokenAsync(userId, refreshToken))
             {
                 return BadRequest("invalid token");
             }
-
-            int userId = GetUserIdFromToken(refreshToken);
 
             await accountService.InvalidateTokenAsync(userId, refreshToken);
 
@@ -120,6 +115,7 @@ namespace HeatDev.Controllers
         {
             var claims = new List<Claim>
             {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim("user_id", user.Id.ToString())
             };
 
@@ -159,7 +155,7 @@ namespace HeatDev.Controllers
             return tokenVM;
         }
 
-        private bool ValidateRerfreshToken(string refreshToken)
+        private async Task<bool> ValidateRerfreshTokenAsync(int userId, string refreshToken)
         {
             var validationParameters = new TokenValidationParameters
             {
@@ -188,6 +184,11 @@ namespace HeatDev.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                return false;
+            }
+
+            if (!await accountService.TokenIsValidAsync(userId, refreshToken))
+            {
                 return false;
             }
 

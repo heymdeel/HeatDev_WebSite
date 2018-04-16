@@ -12,11 +12,11 @@ namespace HeatDevBLL.Services
         Task<bool> UserExistsAsync(string login);
         Task<User> FindUserByIdAsync(int id);
         //Task<UserProfile> GetUserProfileAsync(int userId);
-        Task<bool> PasswordIsValid(string login, string password);
 
         Task<User> SignUpUserAsync(UserSignUpDTO userData);
         Task<User> SignInUserAsync(UserSignInDTO userData);
 
+        Task<bool> TokenIsValidAsync(int userId, string refreshToken);
         Task InvalidateTokenAsync(int userId, string refreshToken);
         Task StoreRefreshTokenAsync(User user, string refreshToken);
     }
