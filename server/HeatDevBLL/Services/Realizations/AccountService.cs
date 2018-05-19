@@ -22,6 +22,14 @@ namespace HeatDevBLL.Services
             }
         }
 
+        public async Task<UserProfile> GetUserProfileAsync(int userId)
+        {
+            using (var db = new DBContext())
+            {
+                return await db.UsersProfiles.FirstOrDefaultAsync(u => u.Id == userId);
+            }
+        }
+
         public async Task<User> FindUserByIdAsync(int id)
         {
             using (var db = new DBContext())
@@ -45,10 +53,7 @@ namespace HeatDevBLL.Services
             var user = Mapper.Map<User>(userData);
             user.Hash = GeneratePassword(userData.Login, userData.Password);
 
-            if (String.IsNullOrEmpty(user.Avatar))
-            {
-                user.Avatar = "https://www.drupal.org/files/issues/default-avatar.png";
-            }
+
 
             user.Roles = new string[] { "client" };
 
@@ -59,6 +64,10 @@ namespace HeatDevBLL.Services
 
                 var userProfile = Mapper.Map<UserProfile>(userData);
                 userProfile.Id = createdUser.Id;
+                if (String.IsNullOrEmpty(userData.Avatar))
+                {
+                    userProfile.Avatar = "https://www.drupal.org/files/issues/default-avatar.png";
+                }
 
                 await db.InsertAsync(userProfile);
 

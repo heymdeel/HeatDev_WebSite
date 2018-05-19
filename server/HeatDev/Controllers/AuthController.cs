@@ -73,9 +73,9 @@ namespace HeatDev.Controllers
         }
 
         // POST: api/auth/token
-        [HttpPost("token")]
+        [HttpPost("token/{refreshToken}")]
         [ProducesResponseType(typeof(TokenVM), 200)]
-        public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshTokens([FromRoute] string refreshToken)
         {
             int userId = GetUserIdFromToken(refreshToken);
 
@@ -96,8 +96,8 @@ namespace HeatDev.Controllers
         }
 
         // DELETE: api/auth/token
-        [HttpDelete("token")]
-        public async Task<IActionResult> InvalidateToken([FromBody] string refreshToken)
+        [HttpDelete("token/{refreshToken}")]
+        public async Task<IActionResult> InvalidateToken([FromRoute] string refreshToken)
         {
             int userId = GetUserIdFromToken(refreshToken);
 

@@ -11,7 +11,7 @@ namespace HeatDevBLL.Services
     {
         Task<bool> UserExistsAsync(string login);
         Task<User> FindUserByIdAsync(int id);
-        //Task<UserProfile> GetUserProfileAsync(int userId);
+        Task<UserProfile> GetUserProfileAsync(int userId);
 
         Task<User> SignUpUserAsync(UserSignUpDTO userData);
         Task<User> SignInUserAsync(UserSignInDTO userData);

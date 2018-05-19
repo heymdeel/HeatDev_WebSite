@@ -12,6 +12,7 @@ namespace HeatDev.ViewModels
         public MappingProfileVM()
         {
             CreateMap<User, TokenVM>();
+            CreateMap<UserProfile, UserProfileVM>();
         }
     }
 }

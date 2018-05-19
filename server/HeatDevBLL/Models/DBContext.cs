@@ -45,6 +45,9 @@ namespace HeatDevBLL.Models
     {
         public ITable<User> Users { get => GetTable<User>(); }
         public ITable<UserProfile> UsersProfiles { get => GetTable<UserProfile>(); }
+        public ITable<Order> Orders { get => GetTable<Order>(); }
+        public ITable<OrderCategory> OrderCategories { get => GetTable<OrderCategory>(); }
+        public ITable<OrderStatus> orderStatuses { get => GetTable<OrderStatus>(); }
 
         static DBContext()
         {

@@ -6,12 +6,11 @@ using System.Text;
 namespace HeatDevBLL.Models.Entities
 {
     [Table(Schema = "public", Name = "users")]
-    public class User
+    public partial class User
     {
         [Column(@"id"), PrimaryKey, Identity] public int Id { get; set; } // integer
         [Column(@"login"), NotNull] public string Login { get; set; } // character varying(15)
         [Column(@"hash"), NotNull] public string Hash { get; set; } // text
-        [Column(@"avatar"), NotNull] public string Avatar { get; set; } // text
         [Column(@"roles"), NotNull] public string[] Roles { get; set; } // ARRAY
         [Column(@"refresh_token"), Nullable] public string RefreshToken { get; set; } // text
 

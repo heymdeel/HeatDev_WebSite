@@ -1,0 +1,27 @@
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+@include md-register-theme("default", (
+  primary: md-get-palette-color(blue, 500), // The primary color of your application
+  accent: md-get-palette-color(red, A200), // The accent or secondary color
+));
+
+@include md-register-theme("green", (
+  primary: md-get-palette-color(lightgreen, 700) // The primary color of your application
+));
+
+@include md-register-theme("toolbar1", (
+  primary: md-get-palette-color(grey, 800), // The primary color of your application
+  accent: md-get-palette-color(green, 400) // The accent or secondary color
+));
+
+@include md-register-theme("toolbar2", (
+  primary: md-get-palette-color(cyan, 700), // The primary color of your application
+  accent: md-get-palette-color(white, 400) // The accent or secondary color
+));
+
+@include md-register-theme("toolbar3", (
+  primary: md-get-palette-color(white, A200), // The primary color of your application
+  accent: md-get-palette-color(white, A200) // The accent or secondary color
+));
+
+@import "~vue-material/dist/theme/all"; // Apply the theme
