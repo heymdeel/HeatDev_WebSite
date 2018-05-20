@@ -65,6 +65,8 @@ namespace HeatDev
                 });
             }
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
 
             app.UseMvc();

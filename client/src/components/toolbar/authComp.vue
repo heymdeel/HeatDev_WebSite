@@ -10,7 +10,7 @@
         <md-dialog-content>
             <form novalidate @submit.stop.prevent="submit">
                 
-                <md-field :class="{'md-input-invalid': errors.has('login')}">
+                <md-field :class="{'md-invalid': errors.has('login')}">
                     <label>Логин</label>
                     <md-input required
                         name="login"
@@ -20,12 +20,12 @@
                         v-validate="'required'"
                         @keyup.enter.native="signIn"
                         ></md-input>
+                        <span class="md-error">{{errors.first('login')}}</span>
                 </md-field>
-                <span class="error">{{errors.first('login')}}</span>
-
+                
                 <br>
 
-                <md-field md-has-password :class="{'md-input-invalid': errors.has('password')}">
+                <md-field md-has-password :class="{'md-invalid': errors.has('password')}">
                     <label>Пароль</label>
                     <md-input required 
                         type="password" 
@@ -35,9 +35,9 @@
                         data-vv-name="password"
                         v-validate="'required'" 
                         @keyup.enter.native="signIn"></md-input>
+                        <span class="md-error">{{errors.first('password')}}</span>
                 </md-field>
-                <span class="error">{{errors.first('password')}}</span>
-
+                
             </form>
         </md-dialog-content>
 
@@ -100,7 +100,7 @@ export default {
                 EventBus.$emit('global-loading-start');
                 await auth.signIn(credentials);
                 
-                //EventBus.$emit('user-login');
+                EventBus.$emit('user-sign-in');
                 this.show_dialog = false;
             } catch(error) {
                 console.log(error);
@@ -133,7 +133,4 @@ export default {
 </script>
 
 <style scoped>
-.error {
-    color: red
-}
 </style>

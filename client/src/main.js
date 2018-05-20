@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import auth from '@/auth'
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import './themes.scss'
+
+auth.checkAuth();
 
 import VeeValidate, {Validator} from 'vee-validate'
 import messagesRU from 'vee-validate/dist/locale/ru';

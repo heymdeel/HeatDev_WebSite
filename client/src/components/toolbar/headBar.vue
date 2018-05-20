@@ -45,7 +45,7 @@ header {
 }
 
 .logo {
-    margin-left: 10%;
+    margin-left: 15%;
     flex-basis: 20%;
 }
 
@@ -73,6 +73,6 @@ nav {
 
 .user-form {
     margin: 0 auto;
-    margin-right: 10%;
+    margin-right: 15%;
 }
 </style>

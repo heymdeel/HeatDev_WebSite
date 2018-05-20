@@ -15,9 +15,8 @@ namespace HeatDev.Options
         public string RefreshAudience { get; set; }
         public string Key { get; set; }
 
-        // TODO: Change access lifetime to 15 minutes
         public static readonly int REFRESH_LIFETIME = 180 * 24 * 60;
-        public static readonly int ACCESS_LIFETIME = 180 * 24 * 60;
+        public static readonly double ACCESS_LIFETIME = 15;
 
         public SymmetricSecurityKey GetSymmetricSecurityKey()
         {

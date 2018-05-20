@@ -25,3 +25,7 @@
 ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
+
+html {
+  margin-right: calc(-1 * (100vw - 100%));
+}

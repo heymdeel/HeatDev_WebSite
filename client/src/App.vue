@@ -2,7 +2,9 @@
   <div id="app">
     <spinner v-if="global_loading"></spinner>
     <head-bar></head-bar>
-    <router-view/>
+    <div class="content">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -50,8 +52,16 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 0px;
-  
+  margin-top: 0px;  
 }
 
+.content {
+  margin: 0 auto;
+  margin-left: 15%;
+  width: 70%;
+}
+
+.md-error {
+  color: red;
+}
 </style>

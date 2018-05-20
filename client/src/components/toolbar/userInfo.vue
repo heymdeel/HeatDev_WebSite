@@ -1,6 +1,6 @@
 <template>
 <div>
-    <md-menu md-auto-width md-align-trigger>
+    <md-menu md-size="medium" md-align-trigger>
         <md-button md-menu-trigger>
             <span>{{user.profile.name}}</span>
             <md-avatar>
