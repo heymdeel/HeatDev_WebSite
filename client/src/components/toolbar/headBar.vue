@@ -1,21 +1,22 @@
 <template>
 <header>
     <md-toolbar class="md-dense md-primary" md-theme="toolbar2">
-        
-        <div class="logo">
-            <router-link to="/" class="home-link">
-                <img src="../../assets/logo.png">
-                <h1 class="md-title">HeatDevices</h1>
-            </router-link>    
+        <div class="container">
+            <div>
+                <router-link to="/" class="home-link">
+                    <img src="../../assets/logo.png">
+                    <h1 class="md-title">HeatDevices</h1>
+                </router-link>    
+            </div>
+
+            <nav>
+                <router-link tag="md-button" to="/" >Главная</router-link>
+                <router-link tag="md-button" to="/orders" >Заказы</router-link>
+                <router-link tag="md-button" to="/reviews" >Отзывы</router-link>
+            </nav>
+
+            <user-box></user-box>
         </div>
-
-        <nav>
-            <router-link tag="md-button" to="/" >Главная</router-link>
-            <router-link tag="md-button" to="/courses" >Заказы</router-link>
-            <router-link tag="md-button" to="/contacts" >Отзывы</router-link>
-        </nav>
-
-        <user-box class="user-form"></user-box>
     </md-toolbar>              
 </header>    
 </template>
@@ -37,22 +38,22 @@ export default {
 </script>
 
 <style scoped>
-header {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
+header {    
     margin-bottom: 30px;
 }
 
-.logo {
-    margin-left: 15%;
-    flex-basis: 20%;
+.container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    width: 70%;
 }
 
 .home-link {
     display: flex;
     flex-flow: row wrap;
-    justify-content: flex-start;
     align-items: center;
 }
 
@@ -67,12 +68,5 @@ nav > * {
 nav {
     display: flex;
     flex-flow: row wrap;
-    
-    align-items: center;
-}
-
-.user-form {
-    margin: 0 auto;
-    margin-right: 15%;
 }
 </style>

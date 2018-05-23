@@ -1,6 +1,6 @@
 <template>
 <div>
-    <auth-comp v-if="!user.authenticated"></auth-comp>
+    <auth-comp v-if="!user.is_authenticated"></auth-comp>
     <user-info v-else></user-info>
 </div>
 </template>

@@ -57,7 +57,6 @@ export default {
 
 .content {
   margin: 0 auto;
-  margin-left: 15%;
   width: 70%;
 }
 

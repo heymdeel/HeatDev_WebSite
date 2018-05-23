@@ -14,7 +14,7 @@
                     <label>Логин</label>
                     <md-input required
                         name="login"
-                        v-model="login"
+                        v-model="credentials.login"
                         data-vv-as="логин"
                         data-vv-name="login"
                         v-validate="'required'"
@@ -30,7 +30,7 @@
                     <md-input required 
                         type="password" 
                         name="password" 
-                        v-model="password" 
+                        v-model="credentials.password" 
                         data-vv-as="пароль"
                         data-vv-name="password"
                         v-validate="'required'" 
@@ -63,8 +63,10 @@ export default {
     name: 'auth-comp',
     data() {
         return {
-            login: '',
-            password: '',
+            credentials: {
+                login: '',
+                password: '',
+            },
             snackbar_message: '',
             show_dialog: false,
             show_snackbar: false
@@ -87,24 +89,18 @@ export default {
 
         async signIn() {
             if (!await this.$validator.validate()) {
-                this.snackbar_message = 'Введите все данные корректно';
+                this.snackbar_message = 'Введите данные корректно';
                 this.show_snackbar = true;
                 return;
             }
 
-            const credentials = {
-                    login: this.login,
-                    password: this.password
-                };
             try {
                 EventBus.$emit('global-loading-start');
-                await auth.signIn(credentials);
+                await auth.signIn(this.credentials);
                 
                 EventBus.$emit('user-sign-in');
                 this.show_dialog = false;
             } catch(error) {
-                console.log(error);
-
                 const status = error.response.status;
 
                 if (status === 502 || status === 504) {

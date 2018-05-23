@@ -7,8 +7,6 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import './themes.scss'
 
-auth.checkAuth();
-
 import VeeValidate, {Validator} from 'vee-validate'
 import messagesRU from 'vee-validate/dist/locale/ru';
 
@@ -25,6 +23,7 @@ Vue.use(VueMaterial)
 Vue.use(VeeValidate, config)
 
 Vue.config.productionTip = false
+auth.init();
 
 /* eslint-disable no-new */
 new Vue({

@@ -17,7 +17,7 @@ namespace HeatDevBLL.Services
         public async Task<Order> CreateOrderAsync(int userId, OrderCreateDTO orderData)
         {
             var order = Mapper.Map<Order>(orderData);
-            order.BeginingTime = DateTime.Now;
+            order.BeginningTime = DateTime.Now;
             order.ClientId = userId;
             order.StatusId = (int)OrdersStatuses.Awaiting;
             order.Price = diagnosticPrice;
@@ -27,6 +27,22 @@ namespace HeatDevBLL.Services
                 int orderId = await db.InsertWithInt32IdentityAsync(order);
 
                 return await db.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
+            }
+        }
+
+        public async Task<Order> FindOrderByIdAsync(int orderId)
+        {
+            using (var db = new DBContext())
+            {
+                return await db.Orders.LoadWith(o => o.Client).FirstOrDefaultAsync(o => o.Id == orderId);
+            }
+        }
+
+        public async Task<IEnumerable<OrderCategory>> GetCategoiresAsync()
+        {
+            using (var db = new DBContext())
+            {
+                return await db.OrderCategories.ToListAsync();
             }
         }
     }

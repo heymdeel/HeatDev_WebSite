@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '@/components/homePage'
 import SignUpPage from '@/components/users/signUp'
+import Orders from '@/components/orders/orders'
+import CreateOrder from '@/components/orders/createOrder'
+import OrderDetail from '@/components/orders/orderDetail'
 
 Vue.use(Router)
 
@@ -16,6 +19,21 @@ export default new Router({
       path: '/sign_up',
       name: 'sign_up',
       component: SignUpPage
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      component: Orders
+    },
+    {
+      path: '/orders/create',
+      name: 'create_order',
+      component: CreateOrder
+    },
+    {
+      path: '/orders/:id',
+      name: 'orderDetail',
+      component: OrderDetail
     }
   ]
 })

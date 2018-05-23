@@ -10,12 +10,12 @@
         <md-card-content class="container">
             
             <div class="left">
-                <form novalidate @submit.stop.prevent="submit" class="sign-up-form">
+                <form novalidate class="sign-up-form">
 
                     <md-field :class="{'md-invalid': errors.has('login')}">
                         <label>Логин</label>
                         <md-input required
-                            md-counter="15"
+                            maxlength="15"
                             name="login"
                             v-model="input.login"
                             data-vv-as="логин"
@@ -57,7 +57,7 @@
                     <md-field :class="{'md-invalid': errors.has('name')}">
                         <label>Имя</label>
                         <md-input required
-                            md-counter="15"
+                            maxlength="15"
                             name="name"
                             v-model="input.name"
                             data-vv-as="имя"
@@ -71,7 +71,7 @@
                     <md-field :class="{'md-invalid': errors.has('surname')}">
                         <label>Фамилия</label>
                         <md-input required
-                            md-counter="15"
+                            maxlength="15"
                             name="surname"
                             v-model="input.surname"
                             data-vv-as="фамилия"
@@ -85,7 +85,7 @@
                     <md-field :class="{'md-invalid': errors.has('phone')}">
                         <label>Номер телефона</label>
                         <md-input required
-                            md-counter="11"
+                            maxlength="11"
                             name="phone"
                             v-model="input.phone"
                             data-vv-as="номер телефона"
@@ -188,7 +188,6 @@ export default {
         },
 
         async signUp() {
-            
             if (!await this.$validator.validate()) {
                 this.snackbar_message = 'Введите данные корректно';
                 this.show_snackbar = true;
@@ -204,8 +203,6 @@ export default {
                 await auth.signUp(this.input);
                 this.show_dialog = true;
             } catch (error) {
-                console.log(error);
-
                 if (status === 502 || status === 504) {
                     this.snackbar_message = 'Ошибка доступа к серверу';
                     this.show_snackbar = true;

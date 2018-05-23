@@ -10,7 +10,7 @@ namespace HeatDevBLL.Models.Entities
     {
         [Column(@"id"), PrimaryKey, Identity] public int Id { get; set; } // integer
         [Column(@"client"), NotNull] public int ClientId { get; set; } // integer
-        [Column(@"begining_time"), NotNull] public DateTime BeginingTime { get; set; } // timestamp (6) without time zone
+        [Column(@"beginning_time"), NotNull] public DateTime BeginningTime { get; set; } // timestamp (6) without time zone
         [Column(@"end_time"), NotNull] public DateTime EndTime { get; set; } // timestamp (6) without time zone
         [Column(@"category"), NotNull] public int CategoryId { get; set; } // integer
         [Column(@"status"), NotNull] public int StatusId { get; set; } // integer

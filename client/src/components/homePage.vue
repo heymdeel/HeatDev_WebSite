@@ -2,7 +2,7 @@
 <div>
     <md-card>
         <md-card-header>
-            <div class="md-title">Welcome to my web-site!</div>
+            <div class="md-title">Добро пожаловать!</div>
         </md-card-header>
 
         <md-card-content>

@@ -13,10 +13,10 @@ namespace HeatDevBLL.Models.DTO
         public int CategoryId { get; set; }
 
         [JsonProperty("address")]
-        [Required, StringLength(75)]
+        [Required, StringLength(75, MinimumLength = 5)]
         public string Address { get; set; }
 
-        [JsonProperty("visit_time")]
+        [JsonProperty("visit_date")]
         [Required]
         public DateTime VisitTime { get; set; }
     }

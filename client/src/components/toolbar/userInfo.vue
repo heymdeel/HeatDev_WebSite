@@ -13,6 +13,9 @@
             <md-menu-item @click="$router.push('/profile')">
                 <span>Мой профиль</span>
             </md-menu-item>
+            <md-menu-item @click="$router.push('/orders/my')">
+                <span>Мои заказы</span>
+            </md-menu-item>
             <md-divider></md-divider>
             <md-menu-item @click="signOut" >
                 <span>Выход</span>
@@ -46,9 +49,8 @@ export default {
             try {
                 EventBus.$emit('global-loading-start');
                 await auth.signOut();    
+                EventBus.$emit('user-sign-out');
             } catch (error) {
-                console.log(error);
-
                 const status = error.response.status;
 
                 if (status === 502 || status === 504) {
@@ -59,8 +61,6 @@ export default {
             } finally {
                 EventBus.$emit('global-loading-finish');
             }
-            
-            //EventBus.$emit('user-logout');
         }
     }
 }
