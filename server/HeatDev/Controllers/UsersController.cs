@@ -24,6 +24,7 @@ namespace HeatDev.Controllers
 
         [HttpGet("{userId:int}/profile")]
         [Authorize]
+        [ProducesResponseType(typeof(UserProfileVM), 200)]
         public async Task<IActionResult> GetProfile([FromRoute]int userId)
         {
             if (User.GetUserId() != userId)

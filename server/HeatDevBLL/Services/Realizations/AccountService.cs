@@ -53,9 +53,7 @@ namespace HeatDevBLL.Services
             var user = Mapper.Map<User>(userData);
             user.Hash = GeneratePassword(userData.Login, userData.Password);
 
-
-
-            user.Roles = new string[] { "client" };
+            user.Roles = new string[] { "user", "client" };
 
             using (var db = new DBContext())
             {

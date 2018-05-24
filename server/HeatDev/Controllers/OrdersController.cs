@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HeatDev.ViewModels;
+using HeatDevBLL.Models;
 using HeatDevBLL.Models.DTO;
 using HeatDevBLL.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,7 @@ namespace HeatDev.Controllers
         //POST: api/orders
         [HttpPost]
         [Authorize(Roles = "client")]
+        [ProducesResponseType(typeof(CreatedOrderVM), 201)]
         public async Task<IActionResult> CreateOrder([FromBody]OrderCreateDTO orderData)
         {
             if (!ModelState.IsValid)
@@ -42,6 +44,7 @@ namespace HeatDev.Controllers
 
         [HttpGet("{orderId:int}")]
         [Authorize(Roles = "client, worker")]
+        [ProducesResponseType(typeof(OrderDetailVM), 200)]
         public async Task<IActionResult> GetOrderDetail([FromRoute]int orderId)
         {
             var order = await orderService.FindOrderByIdAsync(orderId);
@@ -50,7 +53,7 @@ namespace HeatDev.Controllers
                 return NotFound();
             }
 
-            if (!User.IsInRole("worker") && order.ClientId != User.GetUserId())
+            if (User.IsInRole("client") && order.ClientId != User.GetUserId())
             {
                 return Forbid();
             }
@@ -62,8 +65,35 @@ namespace HeatDev.Controllers
             return Ok(orderDetail);
         }
 
+        [HttpPut("{orderId:int}/status/{status:int}")]
+        [Authorize(Roles = "client, worker")]
+        public async Task<IActionResult> ChangeOrderStatus([FromRoute]int orderId, [FromRoute]int status) 
+        {
+            var order = await orderService.FindOrderByIdAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (User.IsInRole("client") && order.ClientId != User.GetUserId())
+            {
+                return Forbid();
+            }
+
+            var roleType = User.IsInRole("worker") ? RoleType.Worker : RoleType.Client;
+            if (!orderService.ValidateStatuses((OrderStatusBLL)order.StatusId, (OrderStatusBLL)status, roleType))
+            {
+                return BadRequest();
+            };
+
+            await orderService.ChangeOrderStatusAsync(order, (OrderStatusBLL)status);
+
+            return Ok();
+        }
+
         [HttpGet("categories")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(OrderCategoryVM), 200)]
         public async Task<IActionResult> GetCategories()
         {
             var categories = await orderService.GetCategoiresAsync();

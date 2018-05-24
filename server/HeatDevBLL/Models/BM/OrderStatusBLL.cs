@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HeatDevBLL.Models
 {
-    public enum OrdersStatuses
+    public enum OrderStatusBLL
     {
         Awaiting = 0,
         Confirmed = 1,

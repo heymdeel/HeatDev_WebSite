@@ -13,13 +13,26 @@ namespace HeatDevBLL.Services
     public class OrderService : IOrderService
     {
         private readonly double diagnosticPrice = 500;
+        private static Dictionary<OrderStatusBLL, List<OrderStatusBLL>> workerPermissions = new Dictionary<OrderStatusBLL, List<OrderStatusBLL>>()
+                    {
+                        {OrderStatusBLL.Awaiting, new List<OrderStatusBLL>() { OrderStatusBLL.Confirmed, OrderStatusBLL.CanceledByWorker}},
+                        {OrderStatusBLL.Confirmed, new List<OrderStatusBLL>() { OrderStatusBLL.Diagnostics, OrderStatusBLL.CanceledByWorker}},
+                        {OrderStatusBLL.Diagnostics, new List<OrderStatusBLL>() { OrderStatusBLL.Performing, OrderStatusBLL.CanceledByWorker}},
+                        {OrderStatusBLL.Performing, new List<OrderStatusBLL>() { OrderStatusBLL.Completed, OrderStatusBLL.CanceledByWorker}}
+                    };
+
+        private static Dictionary<OrderStatusBLL, List<OrderStatusBLL>> clientPermissions = new Dictionary<OrderStatusBLL, List<OrderStatusBLL>>()
+                    {
+                        {OrderStatusBLL.Awaiting, new List<OrderStatusBLL>() { OrderStatusBLL.CanceledByClient}},
+                        {OrderStatusBLL.Confirmed, new List<OrderStatusBLL>() { OrderStatusBLL.CanceledByClient}}
+                    };
 
         public async Task<Order> CreateOrderAsync(int userId, OrderCreateDTO orderData)
         {
             var order = Mapper.Map<Order>(orderData);
             order.BeginningTime = DateTime.Now;
             order.ClientId = userId;
-            order.StatusId = (int)OrdersStatuses.Awaiting;
+            order.StatusId = (int)OrderStatusBLL.Awaiting;
             order.Price = diagnosticPrice;
 
             using (var db = new DBContext())
@@ -43,6 +56,45 @@ namespace HeatDevBLL.Services
             using (var db = new DBContext())
             {
                 return await db.OrderCategories.ToListAsync();
+            }
+        }
+
+        public bool ValidateStatuses(OrderStatusBLL oldStatus, OrderStatusBLL newStatus, RoleType roleType)
+        {
+            IDictionary<OrderStatusBLL, List<OrderStatusBLL>> permissions;
+
+            switch (roleType)
+            {
+                case RoleType.Client:
+                    permissions = clientPermissions;
+                    break;
+                case RoleType.Worker:
+                    permissions = workerPermissions;
+                    break;
+                default:
+                    permissions = clientPermissions;
+                    break;
+            }
+
+            if (!permissions.ContainsKey(oldStatus))
+            {
+                return false;
+            }
+
+            if (permissions[oldStatus].Contains(newStatus))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task ChangeOrderStatusAsync(Order order, OrderStatusBLL status)
+        {
+            order.StatusId = (int)status;
+            using (var db = new DBContext())
+            {
+                await db.UpdateAsync(order);
             }
         }
     }

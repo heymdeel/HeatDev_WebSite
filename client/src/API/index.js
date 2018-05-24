@@ -30,9 +30,7 @@ export default {
     //========================================================================================
     async createOrder(order) {
         try {
-            if (!auth.checkTokens()) {
-                return;
-            }
+            await auth.checkTokens();
             
             const response = await axios.post('/api/orders/', order);
             return response.data;
@@ -42,9 +40,7 @@ export default {
     },
 
     async getOrderDetails(id) {
-        if (!auth.checkTokens()) {
-            return;
-        }
+        await auth.checkTokens();
 
         try {
             const response = await axios.get(`/api/orders/${id}`);
@@ -52,5 +48,15 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+
+    async changeOrderStatus(orderId, status) {
+        await auth.checkTokens();
+
+        try {
+            const response = await axios.put(`/api/orders/${orderId}/status/${status}`);
+        } catch (error) {
+            throw error;
+        }        
     }
 }

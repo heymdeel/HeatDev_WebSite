@@ -88,8 +88,9 @@ export default {
         }
     },
     async created() {
-        await this.loadCategories();
         EventBus.$on('user-sign-out', this.signOutListener);
+
+        await this.loadCategories();
     },
     destroyed() {
         EventBus.$off('user-sign-out', this.signOutListener);

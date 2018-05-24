@@ -85,7 +85,6 @@ export default {
         try {
           const response = await axios.post(`/api/auth/token/${this.user.refresh_token}`);
           this.readUserData(response);
-
         } catch (error) {
           throw error;
         }
@@ -94,17 +93,18 @@ export default {
       async checkTokens() {
         if (!this.tokenisValid(this.user.refresh_token)) {
           this.clearAuth();
-          EventBus.$emit('user-sign-out')
-          return false;
+          EventBus.$emit('user-sign-out');
+          return;
         }
 
         if (!this.tokenisValid(this.user.access_token)) {
           try {
             await this.refreshTokens();
-
+            
             // update auth data only if we got new tokens from server
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.user.access_token;
             this.storeUserData();
+            
           } catch (error) {
             console.log(error);
             
@@ -112,19 +112,18 @@ export default {
             if (status === 400 || status === 404) {
               this.clearAuth();
               EventBus.$emit('user-sign-out')
-              return false;
+              return;
             }
           }
         }
-
-        return true;
       },
 
-      async init() {
+      init() {
         const user = localStorage.getItem('user');
 
         if (!user) {
           this.user.is_authenticated = false;
+          axios.defaults.headers.common["Authorization"] = '';
           return;
         }
         
@@ -133,20 +132,6 @@ export default {
         if (!this.tokenisValid(this.user.refresh_token)) {
           this.clearAuth();
           return;
-        }
-
-        if (!this.tokenisValid(this.user.access_token)) {
-          try {
-            await this.refreshTokens();
-          } catch (error) {
-            console.log(error);
-            
-            const status = error.response.status;
-            if (status === 400 || status === 404) {
-              this.clearAuth();
-              return;
-            }
-          }
         }
         
         // auth data is still empty. no matter if we have new tokens or old tokens
@@ -166,5 +151,9 @@ export default {
 
       userIsWorker() {
         return this.user.is_authenticated && this.user.roles.some(r => r == 'worker');
+      },
+
+      userIsClient() {
+        return this.user.is_authenticated && this.user.roles.some(r => r == 'client');
       }
 }
