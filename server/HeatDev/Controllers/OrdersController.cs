@@ -91,6 +91,29 @@ namespace HeatDev.Controllers
             return Ok();
         }
 
+        [HttpPut("{orderId:int}/price/{price}")]
+        [Authorize(Roles = "worker")]
+        public async Task<IActionResult> ChangeOrderPrice([FromRoute] int orderId, [FromRoute]double price)
+        {
+            var order = await orderService.FindOrderByIdAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            await orderService.ChangePriceAsync(order, price);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "worker")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+
+            return Ok();
+        }
+
         [HttpGet("categories")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(OrderCategoryVM), 200)]

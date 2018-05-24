@@ -10,11 +10,13 @@ namespace HeatDevBLL.Services
 {
     public interface IOrderService
     {
+        Task<IEnumerable<Order>> GeAllOrdersAsync();
         Task<Order> CreateOrderAsync(int userId, OrderCreateDTO orderData);
         Task<Order> FindOrderByIdAsync(int orderId);
 
         bool ValidateStatuses(OrderStatusBLL oldStatus, OrderStatusBLL newStatus, RoleType roleType);
         Task ChangeOrderStatusAsync(Order order, OrderStatusBLL status);
+        Task ChangePriceAsync(Order order, double price);
 
         Task<IEnumerable<OrderCategory>> GetCategoiresAsync();
     }

@@ -40,7 +40,7 @@
 
                 <div class="flex-list">
                     <div class="md-subheading left-item">
-                        Дата проведения диагноситки: 
+                        Дата проведения диагностики: 
                     </div>
 
                     <div class="md-body-2 right-item">
@@ -74,6 +74,16 @@
 
                 <div class="flex-list">
                     <div class="md-subheading left-item">
+                        Стоимость диагностики: 
+                    </div>
+
+                    <div class="md-body-2 right-item">
+                        {{order.diagnostic_price}}
+                    </div>
+                </div>
+
+                <div class="flex-list">
+                    <div class="md-subheading left-item">
                         Стоимость работ: 
                     </div>
 
@@ -86,16 +96,17 @@
             <md-card-actions>
                 <md-button class="md-raised md-accent" v-show="canDecline" @click="declineHandler">Отмена</md-button>
                 <md-button class="md-raised md-primary" v-show="canAccept" @click="acceptHandler">{{acceptText}}</md-button>
+                <md-button class="md-raised md-primary" v-show="canChangePrice" @click="priceHandler">стоимость работ</md-button>
             </md-card-actions>
         </md-card>
     </div>
 
     <md-dialog-confirm
         :md-active.sync="show_decline_dialog"
-        md-title="Use Google's location service?"
-        md-content="Let Google help apps determine location. <br> This means sending <strong>anonymous</strong> location data to Google, even when no apps are running."
-        md-confirm-text="Agree"
-        md-cancel-text="Disagree"
+        md-title="Вы действительно хотите отменить заявку?"
+        md-content="Данные действие необратимо."
+        md-confirm-text="Да"
+        md-cancel-text="Нет"
         @md-confirm="changeStatus" />
 
     <md-dialog-confirm
@@ -105,6 +116,15 @@
         md-confirm-text="Agree"
         md-cancel-text="Disagree"
         @md-confirm="changeStatus" />
+
+    <md-dialog-prompt
+        :md-active.sync="show_price_dialog"
+        v-model="order.price"
+        type="number"
+        md-title="Введите стоимость работ."
+        md-confirm-text="Ок" 
+        md-cancel-text="Отмена"
+        @md-confirm="changePrice"/>
 
     <md-snackbar md-theme="default" md-position="center" :md-duration="4000" :md-active.sync="show_snackbar" md-persistent>
         <span>{{snackbar_message}}</span>
@@ -131,7 +151,8 @@ export default {
             snackbar_message: '',
             show_decline_dialog: false,
             show_accept_dialog: false,
-            new_status: 0,
+            show_price_dialog: false,
+            new_status: 0
         }
     },
     async created() {
@@ -161,16 +182,20 @@ export default {
             return statuses[this.order.status];
         },
 
+        canChangePrice() {
+            return auth.userIsWorker() && [2, 3].includes(this.order.status);
+        },
+
         canAccept() {
-            return auth.userIsWorker() && this.order.status in [0, 1, 2, 3];
+            return auth.userIsWorker() && [0, 1, 2, 3].includes(this.order.status);
         },
 
         canDecline() {
-            if (auth.userIsClient() && this.order.status in [0, 1]) {
+            if (auth.userIsClient() && [0, 1].includes(this.order.status)) {
                 return true;
             }
 
-            if (auth.userIsWorker() && this.order.status in [0, 1, 2, 3]) {
+            if (auth.userIsWorker() && [0, 1, 2, 3].includes(this.order.status)) {
                 return true;
             }
 
@@ -210,42 +235,6 @@ export default {
             this.$router.push('/');
         },
 
-        async changeStatus() {
-            try {
-                EventBus.$emit('global-loading-start');
-                await api.changeOrderStatus(this.order.id, this.new_status);
-                this.order.status = this.new_status;
-            } catch (error) {
-                const status = error.response.status;
-
-                if (status === 502 || status === 504) {
-                    this.snackbar_message = 'Ошибка доступа к серверу';
-                    this.show_snackbar = true;
-                    return;
-                }
-
-                if (status === 401 || status === 403) {
-                    this.snackbar_message = 'Ошибка авторизации';
-                    this.show_snackbar = true;
-                    return;
-                }
-
-                if (status === 404) {
-                    this.snackbar_message = 'Заявка не найдена';
-                    this.show_snackbar = true;
-                    return;
-                }
-
-                if (status === 400) {
-                    this.snackbar_message = 'Неверный статус заявки';
-                    this.show_snackbar = true;
-                    return;
-                }
-            } finally {
-                EventBus.$emit('global-loading-finish');
-            }
-        },
-
         acceptHandler() {
             if (this.order.status in [0, 1, 2, 3]) {
                 this.new_status = this.order.status + 1;
@@ -264,6 +253,10 @@ export default {
             }
 
             this.show_decline_dialog = true;
+        },
+
+        priceHandler() {
+            this.show_price_dialog = true;
         },
 
         formatDate(date) {
@@ -291,6 +284,57 @@ export default {
                 link_text: "Зарегистрироваться",
                 icon: "lock"
             };
+        },
+
+        handleStatus(status) {
+            if (status === 502 || status === 504) {
+                    this.snackbar_message = 'Ошибка доступа к серверу';
+                    this.show_snackbar = true;
+                    return;
+                }
+
+                if (status === 401 || status === 403) {
+                    this.snackbar_message = 'Ошибка авторизации';
+                    this.show_snackbar = true;
+                    return;
+                }
+
+                if (status === 404) {
+                    this.snackbar_message = 'Заявка не найдена';
+                    this.show_snackbar = true;
+                    return;
+                }
+
+                if (status === 400) {
+                    this.snackbar_message = 'Неверный статус заявки';
+                    this.show_snackbar = true;
+                    return;
+                }
+        },
+
+        async changePrice() {
+            try {
+                EventBus.$emit('global-loading-start');
+                await api.changePrice(this.order.id, this.order.price);
+            } catch (error) {
+                const status = error.response.status;
+                this.handleStatus(status);
+            } finally {
+                EventBus.$emit('global-loading-finish');
+            }
+        },
+
+        async changeStatus() {
+            try {
+                EventBus.$emit('global-loading-start');
+                await api.changeOrderStatus(this.order.id, this.new_status);
+                this.order.status = this.new_status;
+            } catch (error) {
+                const status = error.response.status;
+                this.handleStatus(status);
+            } finally {
+                EventBus.$emit('global-loading-finish');
+            }
         },
 
         async loadOrderDetails() {

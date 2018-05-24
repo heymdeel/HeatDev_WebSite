@@ -33,7 +33,7 @@ namespace HeatDevBLL.Services
             order.BeginningTime = DateTime.Now;
             order.ClientId = userId;
             order.StatusId = (int)OrderStatusBLL.Awaiting;
-            order.Price = diagnosticPrice;
+            order.DiagnosticPrice = diagnosticPrice;
 
             using (var db = new DBContext())
             {
@@ -92,6 +92,20 @@ namespace HeatDevBLL.Services
         public async Task ChangeOrderStatusAsync(Order order, OrderStatusBLL status)
         {
             order.StatusId = (int)status;
+            using (var db = new DBContext())
+            {
+                await db.UpdateAsync(order);
+            }
+        }
+
+        public Task<IEnumerable<Order>> GeAllOrdersAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ChangePriceAsync(Order order, double price)
+        {
+            order.Price = price;
             using (var db = new DBContext())
             {
                 await db.UpdateAsync(order);

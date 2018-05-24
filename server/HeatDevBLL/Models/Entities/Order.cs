@@ -14,7 +14,8 @@ namespace HeatDevBLL.Models.Entities
         [Column(@"end_time"), NotNull] public DateTime EndTime { get; set; } // timestamp (6) without time zone
         [Column(@"category"), NotNull] public int CategoryId { get; set; } // integer
         [Column(@"status"), NotNull] public int StatusId { get; set; } // integer
-        [Column(@"price"), NotNull] public double Price { get; set; } // double precision
+        [Column(@"price"), Nullable] public double Price { get; set; } // double precision
+        [Column(@"diagnostic_price"), NotNull] public double DiagnosticPrice { get; set; } // double precision
         [Column(@"address"), NotNull] public string Address { get; set; }
         [Column(@"visit_time"), NotNull] public DateTime VisitTime { get; set; }
 

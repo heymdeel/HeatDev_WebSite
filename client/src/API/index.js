@@ -58,5 +58,15 @@ export default {
         } catch (error) {
             throw error;
         }        
+    },
+
+    async changePrice(orderId, price) {
+        await auth.checkTokens();
+
+        try {
+            const response = await axios.put(`/api/orders/${orderId}/price/${price}`);
+        } catch (error) {
+            throw error;
+        }
     }
 }

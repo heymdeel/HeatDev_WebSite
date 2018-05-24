@@ -26,6 +26,9 @@ namespace HeatDev.ViewModels
         [JsonProperty("price")]
         public double Price { get; set; }
 
+        [JsonProperty("diagnostic_price")]
+        public double DiagnosticPrice { get; set; }
+
         [JsonProperty("address")]
         public string Address { get; set; }
 
