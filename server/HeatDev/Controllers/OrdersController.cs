@@ -57,12 +57,8 @@ namespace HeatDev.Controllers
             {
                 return Forbid();
             }
-
-            var orderDetail = Mapper.Map<OrderDetailVM>(order);
-            var clientProfile = await accountService.GetUserProfileAsync(order.ClientId);
-            orderDetail.ClientProfile = Mapper.Map<UserProfileVM>(clientProfile);
-
-            return Ok(orderDetail);
+            
+            return Ok(Mapper.Map<OrderDetailVM>(order));
         }
 
         [HttpPut("{orderId:int}/status/{status:int}")]
@@ -108,10 +104,16 @@ namespace HeatDev.Controllers
 
         [HttpGet]
         [Authorize(Roles = "worker")]
+        [ProducesResponseType(typeof(OrderWorkersListVM), 200)]
         public async Task<IActionResult> GetAllOrders()
         {
+            var orders = await orderService.GetAllOrdersWithClientsAsync();
+            if (orders == null)
+            {
+                return NotFound();
+            }
 
-            return Ok();
+            return Ok(Mapper.Map<IEnumerable<OrderWorkersListVM>>(orders));
         }
 
         [HttpGet("categories")]

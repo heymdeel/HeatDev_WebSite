@@ -17,6 +17,7 @@ namespace HeatDev.ViewModels
             CreateMap<OrderCategory, OrderCategoryVM>();
             CreateMap<Order, CreatedOrderVM>();
             CreateMap<Order, OrderDetailVM>();
+            CreateMap<Order, OrderWorkersListVM>();
         }
     }
 }

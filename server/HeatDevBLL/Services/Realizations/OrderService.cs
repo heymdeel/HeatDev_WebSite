@@ -47,7 +47,7 @@ namespace HeatDevBLL.Services
         {
             using (var db = new DBContext())
             {
-                return await db.Orders.LoadWith(o => o.Client).FirstOrDefaultAsync(o => o.Id == orderId);
+                return await db.Orders.LoadWith(o => o.ClientProfile).FirstOrDefaultAsync(o => o.Id == orderId);
             }
         }
 
@@ -92,15 +92,23 @@ namespace HeatDevBLL.Services
         public async Task ChangeOrderStatusAsync(Order order, OrderStatusBLL status)
         {
             order.StatusId = (int)status;
+            if (status == OrderStatusBLL.CanceledByClient || status == OrderStatusBLL.CanceledByWorker || status == OrderStatusBLL.Completed)
+            {
+                order.EndTime = DateTime.Now;
+            }
+
             using (var db = new DBContext())
             {
                 await db.UpdateAsync(order);
             }
         }
 
-        public Task<IEnumerable<Order>> GeAllOrdersAsync()
+        public async Task<IEnumerable<Order>> GetAllOrdersWithClientsAsync()
         {
-            throw new NotImplementedException();
+            using (var db = new DBContext())
+            {
+                return await db.Orders.LoadWith(o => o.ClientProfile).ToListAsync();
+            }
         }
 
         public async Task ChangePriceAsync(Order order, double price)

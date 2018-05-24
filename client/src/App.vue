@@ -25,6 +25,9 @@ export default {
       global_loading: false
     }
   },
+  mounted() {
+    EventBus.$emit('refresh-page');
+  },
   created() {
     EventBus.$on('global-loading-start', this.loadingStartListener);
     EventBus.$on('global-loading-finish', this.loadingFinishListener);

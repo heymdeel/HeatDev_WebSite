@@ -11,7 +11,13 @@
 
             <nav>
                 <router-link tag="md-button" to="/" >Главная</router-link>
-                <router-link tag="md-button" to="/orders" >Заказы</router-link>
+
+                <md-badge v-if="active_orders_num" class="md-primary md-square" md-position="top" :md-content="active_orders_num">
+                    <router-link tag="md-button" to="/orders" >Заказы</router-link>
+                </md-badge>
+
+                <router-link v-else tag="md-button" to="/orders" >Заявки</router-link>
+                
                 <router-link tag="md-button" to="/reviews" >Отзывы</router-link>
             </nav>
 
@@ -24,6 +30,10 @@
 <script>
 import UserBox from './userBox'
 
+import api from '@/API'
+import auth from '@/auth'
+import {EventBus} from '@/EventBus'
+
 export default {
     name: 'head-bar',
     components: {
@@ -31,7 +41,36 @@ export default {
     },
     data() {
         return {
-            login: ''
+            user: auth.user,
+            active_orders_num: 0
+        }
+    },
+    created() {
+        EventBus.$on('refresh-page', this.checkOrders);
+        EventBus.$on('user-sign-in', this.checkOrders);
+        EventBus.$on('user-sign-out', this.headBarSignOutListener);
+    },
+    destroyed() {
+        EventBus.$off('refresh-page', this.checkOrders);
+        EventBus.$off('user-sign-in', this.checkOrders);
+        EventBus.$off('user-sign-out', this.headBarSignOutListener);
+    },
+    methods: {
+        headBarSignOutListener() {
+            this.active_orders_num = 0;
+        },
+
+        async checkOrders() {
+            if (!auth.userIsWorker()) {
+                return;
+            }
+
+            try {
+                const orders = await api.getAllOrders();
+                this.active_orders_num = orders.filter(o => o.status == 0).length;
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 }

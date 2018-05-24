@@ -25,7 +25,7 @@ namespace HeatDevBLL.Models.Entities
         public OrderCategory Category { get; set; }
 
         [Association(ThisKey = "ClientId", OtherKey = "Id", CanBeNull = false, Relationship = Relationship.ManyToOne, KeyName = "orders_client_id_fkey", BackReferenceName = "ordersclientidfkeys")]
-        public UserProfile Client { get; set; }
+        public UserProfile ClientProfile { get; set; }
 
         [Association(ThisKey = "StatusId", OtherKey = "Id", CanBeNull = false, Relationship = Relationship.ManyToOne, KeyName = "orders_status_fkey", BackReferenceName = "ordersstatusfkeys")]
         public OrderStatus Status { get; set; }

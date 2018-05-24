@@ -1,5 +1,6 @@
 import axios from 'axios'
 import auth from '@/auth'
+import { EROFS } from 'constants';
 
 export default {
     // anonymous requests
@@ -65,6 +66,17 @@ export default {
 
         try {
             const response = await axios.put(`/api/orders/${orderId}/price/${price}`);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async getAllOrders() {
+        await auth.checkTokens();
+
+        try {
+            const response = await axios.get('/api/orders');
+            return response.data;
         } catch (error) {
             throw error;
         }

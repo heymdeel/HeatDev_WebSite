@@ -10,7 +10,7 @@
         <md-progress-spinner v-if="loading" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
         <md-card v-else v-show="order" class="order-details-card">
             <md-card-header>
-                <div class="md-title">Информация о заказе</div>
+                <div class="md-title">Информация о заявке</div>
             </md-card-header>
 
             <md-card-content>
@@ -111,10 +111,9 @@
 
     <md-dialog-confirm
         :md-active.sync="show_accept_dialog"
-        md-title="Use Google's location service?"
-        md-content="Let Google help apps determine location. <br> This means sending <strong>anonymous</strong> location data to Google, even when no apps are running."
-        md-confirm-text="Agree"
-        md-cancel-text="Disagree"
+        md-title="Вы действительно хотите продолжить?"
+        md-confirm-text="Да"
+        md-cancel-text="Нет"
         @md-confirm="changeStatus" />
 
     <md-dialog-prompt
@@ -173,7 +172,7 @@ export default {
     computed: {
         acceptText() {
             const statuses = {
-                0: 'Подтвердить заказ',
+                0: 'Подтвердить заявку',
                 1: 'Начать диагностику',
                 2: 'Начать выполнение работ',
                 3: 'Завершить заказ'
@@ -232,6 +231,7 @@ export default {
     },
     methods: {
         signOutListener() {
+            console.log('kke2');
             this.$router.push('/');
         },
 
@@ -394,7 +394,7 @@ export default {
 .flex-list {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     margin: 0 auto;
     width: 70%;
