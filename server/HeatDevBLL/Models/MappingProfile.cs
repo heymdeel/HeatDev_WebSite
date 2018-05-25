@@ -15,6 +15,7 @@ namespace HeatDevBLL.Models
             CreateMap<UserSignUpDTO, UserProfile>();
 
             CreateMap<OrderCreateDTO, Order>();
+            CreateMap<ReviewCreateDTO, Review>();
         }
     }
 }

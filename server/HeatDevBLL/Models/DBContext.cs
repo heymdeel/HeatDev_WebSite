@@ -48,6 +48,7 @@ namespace HeatDevBLL.Models
         public ITable<Order> Orders { get => GetTable<Order>(); }
         public ITable<OrderCategory> OrderCategories { get => GetTable<OrderCategory>(); }
         public ITable<OrderStatus> orderStatuses { get => GetTable<OrderStatus>(); }
+        public ITable<Review> Reviews { get => GetTable<Review>(); }
 
         static DBContext()
         {

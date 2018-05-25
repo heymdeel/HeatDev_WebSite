@@ -8,97 +8,109 @@
     </md-empty-state>
     <div v-else>
         <md-progress-spinner v-if="loading" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-        <md-card v-else v-show="order" class="order-details-card">
-            <md-card-header>
-                <div class="md-title">Информация о заявке</div>
-            </md-card-header>
+        <div v-else-if="order" >
+            <md-card class="order-details-card">
+                <md-card-header>
+                    <div class="md-title">Информация о заявке</div>
+                </md-card-header>
 
-            <md-card-content>
-                <div class="flex-list">
-                    <div class="md-subheading left-item">
-                        Заказчик: 
+                <md-card-content>
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
+                            Заказчик: 
+                        </div>
+
+                        <div class="md-body-2 right-item">
+                            {{order.client.name}} {{order.client.surname}}
+                            <br>
+                            <md-icon>phone</md-icon>{{order.client.phone}}
+                            <br>
+                            {{order.address}}
+                        </div>
                     </div>
 
-                    <div class="md-body-2 right-item">
-                        {{order.client.name}} {{order.client.surname}}
-                        <br>
-                        <md-icon>phone</md-icon>{{order.client.phone}}
-                        <br>
-                        {{order.address}}
-                    </div>
-                </div>
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
+                            Модель оборудования: 
+                        </div>
 
-                <div class="flex-list">
-                    <div class="md-subheading left-item">
-                        Модель оборудования: 
+                        <div class="md-body-2 right-item">
+                            {{categoryName(order.category)}}
+                        </div>
                     </div>
 
-                    <div class="md-body-2 right-item">
-                        {{categoryName(order.category)}}
-                    </div>
-                </div>
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
+                            Дата проведения диагностики: 
+                        </div>
 
-                <div class="flex-list">
-                    <div class="md-subheading left-item">
-                        Дата проведения диагностики: 
-                    </div>
-
-                    <div class="md-body-2 right-item">
-                        <md-icon>date_range</md-icon>
-                        {{formatDate(order.visit_time)}}
-                    </div>
-                </div>
-
-                <div class="flex-list">
-                    <div class="md-subheading left-item">
-                        Дата оформления заявки: 
+                        <div class="md-body-2 right-item">
+                            <md-icon>date_range</md-icon>
+                            {{formatDate(order.visit_time)}}
+                        </div>
                     </div>
 
-                    <div class="md-body-2 right-item">
-                        <md-icon>date_range</md-icon>
-                        {{formatDate(order.beginning_time)}}
-                    </div>
-                </div>
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
+                            Дата оформления заявки: 
+                        </div>
 
-                <div class="flex-list">
-                    <div class="md-subheading left-item">
-                        Статус: 
-                    </div>
-
-                    <div class="md-body-2 right-item" :style="statusColour">
-                        {{statusName}}
-                    </div>
-                </div>
-
-                <md-divider></md-divider>
-
-                <div class="flex-list">
-                    <div class="md-subheading left-item">
-                        Стоимость диагностики: 
+                        <div class="md-body-2 right-item">
+                            <md-icon>date_range</md-icon>
+                            {{formatDate(order.beginning_time)}}
+                        </div>
                     </div>
 
-                    <div class="md-body-2 right-item">
-                        {{order.diagnostic_price}}
-                    </div>
-                </div>
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
+                            Статус: 
+                        </div>
 
-                <div class="flex-list">
-                    <div class="md-subheading left-item">
-                        Стоимость работ: 
+                        <div class="md-body-2 right-item" :style="statusColour">
+                            {{statusName}}
+                        </div>
                     </div>
 
-                    <div class="md-body-2 right-item">
-                        {{order.price}}
-                    </div>
-                </div>
-            </md-card-content>
+                    <md-divider></md-divider>
 
-            <md-card-actions>
-                <md-button class="md-raised md-accent" v-show="canDecline" @click="declineHandler">Отмена</md-button>
-                <md-button class="md-raised md-primary" v-show="canAccept" @click="acceptHandler">{{acceptText}}</md-button>
-                <md-button class="md-raised md-primary" v-show="canChangePrice" @click="priceHandler">стоимость работ</md-button>
-            </md-card-actions>
-        </md-card>
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
+                            Стоимость диагностики: 
+                        </div>
+
+                        <div class="md-body-2 right-item">
+                            {{order.diagnostic_price}}
+                        </div>
+                    </div>
+
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
+                            Стоимость работ: 
+                        </div>
+
+                        <div class="md-body-2 right-item">
+                            {{order.price}}
+                        </div>
+                    </div>
+                </md-card-content>
+
+                <md-card-actions>
+                    <md-button class="md-raised md-primary" v-if="canReview" @click="reviewHandler">Оставить отзыв</md-button>
+                    <md-button class="md-raised md-accent" v-if="canDecline" @click="declineHandler">Отмена</md-button>
+                    <md-button class="md-raised md-primary" v-if="canAccept" @click="acceptHandler">{{acceptText}}</md-button>
+                    <md-button class="md-raised md-primary" v-show="canChangePrice" @click="priceHandler">стоимость работ</md-button>
+                </md-card-actions>
+            </md-card>
+
+            <md-dialog-prompt
+            :md-active.sync="show_price_dialog"
+            v-model="order.price"
+            type="number"
+            md-title="Введите стоимость работ."
+            md-confirm-text="Ок" 
+            md-cancel-text="Отмена"
+            @md-confirm="changePrice"/>
+        </div>
     </div>
 
     <md-dialog-confirm
@@ -115,15 +127,6 @@
         md-confirm-text="Да"
         md-cancel-text="Нет"
         @md-confirm="changeStatus" />
-
-    <md-dialog-prompt
-        :md-active.sync="show_price_dialog"
-        v-model="order.price"
-        type="number"
-        md-title="Введите стоимость работ."
-        md-confirm-text="Ок" 
-        md-cancel-text="Отмена"
-        @md-confirm="changePrice"/>
 
     <md-snackbar md-theme="default" md-position="center" :md-duration="4000" :md-active.sync="show_snackbar" md-persistent>
         <span>{{snackbar_message}}</span>
@@ -181,6 +184,10 @@ export default {
             return statuses[this.order.status];
         },
 
+        canReview() {
+            return this.order.client.id === this.user.id && this.order.status === 4;
+        },
+
         canChangePrice() {
             return auth.userIsWorker() && [2, 3].includes(this.order.status);
         },
@@ -231,8 +238,11 @@ export default {
     },
     methods: {
         signOutListener() {
-            console.log('kke2');
             this.$router.push('/');
+        },
+
+        reviewHandler() {
+            this.$router.push(`/orders/${this.order.id}/review`);
         },
 
         acceptHandler() {

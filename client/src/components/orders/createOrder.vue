@@ -97,7 +97,6 @@ export default {
     },
     methods: {
         signOutListener() {
-            console.log('kke3');
             this.$router.push('/');
         },
 

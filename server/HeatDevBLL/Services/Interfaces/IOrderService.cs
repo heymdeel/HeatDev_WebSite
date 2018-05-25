@@ -18,6 +18,9 @@ namespace HeatDevBLL.Services
         Task ChangeOrderStatusAsync(Order order, OrderStatusBLL status);
         Task ChangePriceAsync(Order order, double price);
 
+        Task LeaveReviewAsync(int orderId, ReviewCreateDTO reviewData);
+        Task<bool> OrderHasReviewAsync(int orderId);
+
         Task<IEnumerable<OrderCategory>> GetCategoiresAsync();
     }
 }

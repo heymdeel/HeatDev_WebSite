@@ -5,6 +5,7 @@ import SignUpPage from '@/components/users/signUp'
 import Orders from '@/components/orders/orders'
 import CreateOrder from '@/components/orders/createOrder'
 import OrderDetail from '@/components/orders/orderDetail'
+import CreateReview from '@/components/reviews/createReview'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/orders/:id',
       name: 'orderDetail',
       component: OrderDetail
+    },
+    {
+      path: '/orders/:id/review',
+      name: 'create_review',
+      component: CreateReview
     }
   ]
 })

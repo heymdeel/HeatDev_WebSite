@@ -116,6 +116,31 @@ namespace HeatDev.Controllers
             return Ok(Mapper.Map<IEnumerable<OrderWorkersListVM>>(orders));
         }
 
+        [HttpPost("{orderId:int}/review")]
+        [Authorize(Roles = "client")]
+        public async Task<IActionResult> LeaveReview([FromRoute]int orderId, [FromBody]ReviewCreateDTO reviewData)
+        {
+            var order = await orderService.FindOrderByIdAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (order.ClientId != User.GetUserId())
+            {
+                return Forbid();
+            }
+
+            if (!ModelState.IsValid || await orderService.OrderHasReviewAsync(orderId))
+            {
+                return BadRequest(ModelState);
+            }
+
+            await orderService.LeaveReviewAsync(orderId, reviewData);
+
+            return Ok();
+        }
+
         [HttpGet("categories")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(OrderCategoryVM), 200)]
