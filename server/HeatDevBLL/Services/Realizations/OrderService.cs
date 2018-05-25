@@ -119,23 +119,5 @@ namespace HeatDevBLL.Services
                 await db.UpdateAsync(order);
             }
         }
-
-        public async Task LeaveReviewAsync(int orderId, ReviewCreateDTO reviewData)
-        {
-            var review = Mapper.Map<Review>(reviewData);
-            review.Id = orderId;
-            using (var db = new DBContext())
-            {
-                await db.InsertAsync(review);
-            }
-        }
-
-        public async Task<bool> OrderHasReviewAsync(int orderId)
-        {
-            using (var db = new DBContext())
-            {
-                return await db.Reviews.AnyAsync(r => r.Id == orderId);
-            }
-        }
     }
 }

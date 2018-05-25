@@ -33,6 +33,7 @@ namespace HeatDev
             // services
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IReviewsService, ReviewsService>();
 
             // Authhorization
             services.AddTokenAuthorization(Configuration);
@@ -59,7 +60,7 @@ namespace HeatDev
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarHelp API V1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "HeatDev API V1");
 
                     c.DocExpansion(DocExpansion.None);
                 });

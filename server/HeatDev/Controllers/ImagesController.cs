@@ -21,8 +21,11 @@ namespace HeatDev.Controllers
             this.hostingEnvironment = hostingEnvironment;
         }
 
+        // POST: api/images
+        /// <summary> Uploading image </summary>
+        /// <response code="200"> image has been uploaded </response>
         [HttpPost]
-        [AllowAnonymous]
+        [ProducesResponseType(typeof(String), 200)]
         public async Task<IActionResult> UploadImage(IFormFile image)
         {
             if (image == null)
@@ -39,7 +42,6 @@ namespace HeatDev.Controllers
             }
 
             return Ok($"{Request.Scheme}://{Request.Host}/images/{fileName}");
-
         }
     }
 }

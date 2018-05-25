@@ -30,6 +30,9 @@ namespace HeatDevBLL.Models.Entities
         [Association(ThisKey = "StatusId", OtherKey = "Id", CanBeNull = false, Relationship = Relationship.ManyToOne, KeyName = "orders_status_fkey", BackReferenceName = "ordersstatusfkeys")]
         public OrderStatus Status { get; set; }
 
+        [Association(ThisKey = "Id", OtherKey = "Id", CanBeNull = true, Relationship = Relationship.OneToOne, IsBackReference = true)]
+        public Review Review { get; set; }
+
         #endregion
     }
 }

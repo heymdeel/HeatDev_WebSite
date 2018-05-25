@@ -14,7 +14,7 @@ namespace HeatDev.ViewModels
             CreateMap<User, TokenVM>();
             CreateMap<UserProfile, UserProfileVM>();
 
-            CreateMap<OrderCategory, OrderCategoryVM>();
+            CreateMap<OrderCategory, CategoryVM>();
             CreateMap<Order, CreatedOrderVM>();
             CreateMap<Order, OrderDetailVM>();
             CreateMap<Order, OrderWorkersListVM>();

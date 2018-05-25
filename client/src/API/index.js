@@ -54,7 +54,9 @@ export default {
         await auth.checkTokens();
 
         try {
-            const response = await axios.put(`/api/orders/${orderId}/status/${status}`);
+            const response = await axios.put(`/api/orders/${orderId}/status`, status, {
+                headers: { 'Content-Type': 'application/json' }
+              });
         } catch (error) {
             throw error;
         }        
@@ -64,7 +66,9 @@ export default {
         await auth.checkTokens();
 
         try {
-            const response = await axios.put(`/api/orders/${orderId}/price/${price}`);
+            const response = await axios.put(`/api/orders/${orderId}/price`, price, {
+                headers: { 'Content-type': 'application/json' }
+            });
         } catch (error) {
             throw error;
         }
@@ -81,11 +85,11 @@ export default {
         }
     },
 
-    async sendReview(order_id, review) {
+    async sendReview(review) {
         await auth.checkTokens();
 
         try {
-            await axios.post(`/api/orders/${order_id}/review`, review);
+            await axios.post(`/api/reviews`, review);
         } catch (error) {
             throw error;
         }

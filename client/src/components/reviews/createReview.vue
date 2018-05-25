@@ -70,8 +70,8 @@ export default {
     data() {
         return {
             user: auth.user,
-            order_id: this.$route.params.id,
             review: {
+                order_id: this.$route.params.id,
                 rating: 0,
                 text: '',
             },
@@ -121,7 +121,7 @@ export default {
             try {
                 this.error = null;
                 EventBus.$emit('global-loading-start');
-                await api.sendReview(this.order_id, this.review);
+                await api.sendReview(this.review);
                 this.show_dialog = true;
             } catch (error) {
                 const status = error.response.status;

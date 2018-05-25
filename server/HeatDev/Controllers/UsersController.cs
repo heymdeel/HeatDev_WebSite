@@ -22,6 +22,11 @@ namespace HeatDev.Controllers
             this.accountService = accountService;
         }
 
+        // GET: api/users/{id}/profile
+        /// <summary> Get user profile </summary>
+        /// <response code="200"> tokens have been successfully refreshed </response>
+        /// <response code="403"> wrong token </response>
+        /// <response code="404"> user doesn't exist </response>
         [HttpGet("{userId:int}/profile")]
         [Authorize]
         [ProducesResponseType(typeof(UserProfileVM), 200)]

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HeatDev.ViewModels
 {
-    public class OrderCategoryVM
+    public class CategoryVM
     {
         [JsonProperty("id")]
         public int Id { get; set; }

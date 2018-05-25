@@ -31,6 +31,9 @@ namespace HeatDev.Controllers
         }
 
         // POST: api/auth/sign_up
+        /// <summary> Client sign up </summary>
+        /// <response code="200"> user has been successfully signed up </response>
+        /// <response code="400"> errors in model valdation or user already exists </response>
         [HttpPost("sign_up")]
         [ProducesResponseType(typeof(TokenVM), 200)]
         public async Task<IActionResult> SignUpUser([FromBody]UserSignUpDTO userData)
@@ -46,12 +49,20 @@ namespace HeatDev.Controllers
             }
 
             User user = await accountService.SignUpUserAsync(userData);
-            var tokenVM = await GetTokenVMAsync(user);
+
+            var tokens = await GenerateAndStoreTokensAsync(user);
+            var tokenVM = Mapper.Map<TokenVM>(user);
+            tokenVM.AccessToken = tokens.access;
+            tokenVM.RefreshToken = tokens.refresh;
 
             return Ok(tokenVM);
         }
 
         // POST: api/auth/sign_in
+        /// <summary> User sign in </summary>
+        /// <response code="200"> user has been successfully signed in </response>
+        /// <response code="400"> errors in model valdation or user already exists </response>
+        /// <response code="404"> wrong login/password </response>
         [HttpPost("sign_in")]
         [ProducesResponseType(typeof(TokenVM), 200)]
         public async Task<IActionResult> SignInUser([FromBody]UserSignInDTO userData)
@@ -67,15 +78,22 @@ namespace HeatDev.Controllers
                 return NotFound();
             }
 
-            var tokenVM = await GetTokenVMAsync(user);
+            var tokens = await GenerateAndStoreTokensAsync(user);
+            var tokenVM = Mapper.Map<TokenVM>(user);
+            tokenVM.AccessToken = tokens.access;
+            tokenVM.RefreshToken = tokens.refresh;
 
             return Ok(tokenVM);
         }
 
-        // POST: api/auth/token
-        [HttpPost("token/{refreshToken}")]
+        // POST: api/auth/token/refresh
+        /// <summary> Refreshing tokens </summary>
+        /// <response code="200"> tokens have been successfully refreshed </response>
+        /// <response code="400"> refresh token is invalid </response>
+        /// <response code="404"> user doesn't exist </response>
+        [HttpPost("token/refresh")]
         [ProducesResponseType(typeof(TokenVM), 200)]
-        public async Task<IActionResult> RefreshTokens([FromRoute] string refreshToken)
+        public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
         {
             int userId = GetUserIdFromToken(refreshToken);
 
@@ -90,14 +108,20 @@ namespace HeatDev.Controllers
                 return NotFound();
             }
 
-            var tokenVM = await GetTokenVMAsync(user);
+            var tokens = await GenerateAndStoreTokensAsync(user);
+            var tokenVM = Mapper.Map<TokenVM>(user);
+            tokenVM.AccessToken = tokens.access;
+            tokenVM.RefreshToken = tokens.refresh;
 
             return Ok(tokenVM);
         }
 
-        // DELETE: api/auth/token
-        [HttpDelete("token/{refreshToken}")]
-        public async Task<IActionResult> InvalidateToken([FromRoute] string refreshToken)
+        // POST: api/auth/token/invalidate
+        /// <summary> Invalidate refresh token </summary>
+        /// <response code="200"> refresh token has been successfully invalidated </response>
+        /// <response code="400"> refresh token is invalid </response>
+        [HttpPost("token/invalidate")]
+        public async Task<IActionResult> InvalidateToken([FromBody]string refreshToken)
         {
             int userId = GetUserIdFromToken(refreshToken);
 
@@ -109,6 +133,18 @@ namespace HeatDev.Controllers
             await accountService.InvalidateTokenAsync(userId, refreshToken);
 
             return NoContent();
+        }
+
+        private async Task<(string refresh, string access)> GenerateAndStoreTokensAsync(User user)
+        {
+            ClaimsIdentity identity = GetIdentity(user);
+
+            string refreshToken = GenerateToken(identity, TokenType.Refresh);
+            string accessToken = GenerateToken(identity, TokenType.Access);
+
+            await accountService.StoreRefreshTokenAsync(user, refreshToken);
+
+            return (refreshToken, accessToken);
         }
 
         private ClaimsIdentity GetIdentity(User user)
@@ -126,8 +162,6 @@ namespace HeatDev.Controllers
 
         private string GenerateToken(ClaimsIdentity identity, TokenType tokenType)
         {
-            Console.WriteLine(authOptions.Key);
-
             var jwt = new JwtSecurityToken(
                     issuer: authOptions.Issuer,
                     audience: tokenType == TokenType.Refresh ? authOptions.RefreshAudience : authOptions.AccessAudience,
@@ -137,22 +171,6 @@ namespace HeatDev.Controllers
                     signingCredentials: new SigningCredentials(authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
-        }
-
-        private async Task<TokenVM> GetTokenVMAsync(User user)
-        {
-            ClaimsIdentity identity = GetIdentity(user);
-
-            string refreshToken = GenerateToken(identity, TokenType.Refresh);
-            string accessToken = GenerateToken(identity, TokenType.Access);
-
-            await accountService.StoreRefreshTokenAsync(user, refreshToken);
-
-            var tokenVM = Mapper.Map<TokenVM>(user);
-            tokenVM.AccessToken = accessToken;
-            tokenVM.RefreshToken = refreshToken;
-
-            return tokenVM;
         }
 
         private async Task<bool> ValidateRerfreshTokenAsync(int userId, string refreshToken)

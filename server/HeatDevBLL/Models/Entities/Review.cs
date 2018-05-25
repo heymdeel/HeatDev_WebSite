@@ -14,7 +14,7 @@ namespace HeatDevBLL.Models.Entities
 
         #region Associations
 
-        [Association(ThisKey = "Id", OtherKey = "Id", CanBeNull = false, Relationship = Relationship.ManyToOne, KeyName = "reviews_order_id_fkey", BackReferenceName = "reviewsorderidfkeys")]
+        [Association(ThisKey = "Id", OtherKey = "Id", CanBeNull = false, Relationship = Relationship.OneToOne, KeyName = "reviews_id_fkey", BackReferenceName = "reviewsidfkey")]
         public Order Order { get; set; }
 
         #endregion

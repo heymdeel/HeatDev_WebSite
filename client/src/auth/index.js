@@ -34,7 +34,9 @@ export default {
 
       async signOut() {
         try {
-          await axios.delete(`/api/auth/token/${this.user.refresh_token}`);
+          await axios.post(`/api/auth/token/invalidate`, `"${this.user.refresh_token}"`, {
+            headers: { 'Content-Type': 'application/json' }
+          });
 
           this.clearAuth();
         } catch (error) {
@@ -83,7 +85,9 @@ export default {
 
       async refreshTokens() {
         try {
-          const response = await axios.post(`/api/auth/token/${this.user.refresh_token}`);
+          const response = await axios.post(`/api/auth/token/refresh`, `"${this.user.refresh_token}"`, {
+            headers: { 'Content-Type': 'application/json' }
+          });
           this.readUserData(response);
         } catch (error) {
           throw error;
