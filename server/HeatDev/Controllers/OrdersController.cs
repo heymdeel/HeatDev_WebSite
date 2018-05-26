@@ -137,7 +137,7 @@ namespace HeatDev.Controllers
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await orderService.GetAllOrdersWithClientsAsync();
-            if (orders == null)
+            if (orders == null || orders?.Count() == 0)
             {
                 return NotFound();
             }
@@ -156,7 +156,7 @@ namespace HeatDev.Controllers
         public async Task<IActionResult> GetPersonalOrders()
         {
             var orders = await orderService.GetClientOrdersAsync(User.GetUserId());
-            if (orders == null)
+            if (orders == null || orders?.Count() == 0)
             {
                 return NotFound();
             }

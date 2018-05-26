@@ -99,6 +99,7 @@ export default {
     },
     async created() {
         EventBus.$on('user-sign-in', this.loadOrders);
+        EventBus.$on('user-sign-out', this.signOutClientOrdersListener);
 
         if (!this.user.is_authenticated) {
             this.showAuthError();
@@ -108,6 +109,7 @@ export default {
         await this.loadOrders();
     },
     destroyed() {
+        EventBus.$off('user-sign-out', this.signOutClientOrdersListener);
         EventBus.$off('user-sign-in', this.loadOrders);
     },
     computed: {
@@ -128,6 +130,10 @@ export default {
         }
     },
     methods: {
+        signOutClientOrdersListener() {
+            this.$router.push('/');
+        },
+
         formatDate(date) {
             const now = new Date();
             const new_date = new Date(date);

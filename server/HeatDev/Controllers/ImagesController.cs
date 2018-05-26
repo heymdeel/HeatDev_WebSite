@@ -34,14 +34,14 @@ namespace HeatDev.Controllers
             }
 
             string fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-            string path = Path.Combine(hostingEnvironment.WebRootPath, "images", fileName);
+            string path = Path.Combine(hostingEnvironment.WebRootPath, "img", fileName);
 
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 await image.CopyToAsync(fileStream);
             }
 
-            return Ok($"{Request.Scheme}://{Request.Host}/images/{fileName}");
+            return Ok($"{Request.Scheme}://{Request.Host}/img/{fileName}");
         }
     }
 }
