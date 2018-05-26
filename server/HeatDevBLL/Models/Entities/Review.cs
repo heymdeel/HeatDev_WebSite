@@ -8,7 +8,7 @@ namespace HeatDevBLL.Models.Entities
     [Table(Schema = "public", Name = "reviews")]
     public class Review
     {
-        [Column(@"id"), PrimaryKey, Identity] public int Id { get; set; } // integer
+        [Column(@"id"), PrimaryKey] public int Id { get; set; } // integer
         [Column(@"rate"), NotNull] public int Rating { get; set; } // integer
         [Column(@"commentary"), NotNull] public string Text { get; set; } // text
 

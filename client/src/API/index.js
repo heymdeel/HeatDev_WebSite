@@ -26,6 +26,15 @@ export default {
         }
     },
 
+    async getAllReviews() {
+      try {
+          const response = await axios.get('/api/reviews');
+          return response.data;
+      } catch (error) {
+          throw error;
+      }  
+    },
+
     // authorized requests
     //========================================================================================
     async createOrder(order) {

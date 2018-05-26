@@ -29,5 +29,13 @@ namespace HeatDevBLL.Services
                 return await db.Reviews.AnyAsync(r => r.Id == orderId);
             }
         }
+
+        public async Task<IEnumerable<Review>> GetAllReviewsAsync()
+        {
+            using (var db = new DBContext())
+            {
+                return await db.Reviews.LoadWith(r => r.Order.ClientProfile).ToListAsync();
+            }
+        }
     }
 }

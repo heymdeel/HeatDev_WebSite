@@ -13,7 +13,7 @@
             <md-menu-item @click="$router.push('/profile')">
                 <span>Мой профиль</span>
             </md-menu-item>
-            <md-menu-item @click="$router.push('/myorders')">
+            <md-menu-item v-if="isClient" @click="$router.push('/myorders')">
                 <span>Мои заявки</span>
             </md-menu-item>
             <md-divider></md-divider>
@@ -42,6 +42,11 @@ export default {
             show_snackbar: false,
             snackbar_message: '',
             user: auth.user
+        }
+    },
+    computed: {
+        isClient() {
+            return auth.userIsClient();
         }
     },
     methods: {

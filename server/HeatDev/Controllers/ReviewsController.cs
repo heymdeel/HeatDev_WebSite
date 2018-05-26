@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using HeatDev.ViewModels;
 using HeatDevBLL.Models.DTO;
+using HeatDevBLL.Models.Entities;
 using HeatDevBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +26,7 @@ namespace HeatDev.Controllers
             this.orderService = orderService;
         }
 
-        //POST: api/reviews
+        // POST: api/reviews
         /// <summary> Sending a review </summary>
         /// <response code="200"> success </response>
         /// <response code="400"> invalid data </response>
@@ -53,6 +56,23 @@ namespace HeatDev.Controllers
             await reviewsService.sendReviewAsync(reviewData);
 
             return Ok();
+        }
+
+        // GET: api/reviews
+        /// <summary> Get all reviews </summary>
+        /// <response code="200"> success </response>
+        /// <response code="404"> no reviews were found </response>
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<ReviewVM>), 200)]
+        public async Task<IActionResult> GetAllReviews()
+        {
+            var reviews = await reviewsService.GetAllReviewsAsync();
+            if (reviews == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(Mapper.Map<IEnumerable<ReviewVM>>(reviews));
         }
     }
 }

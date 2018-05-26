@@ -25,7 +25,7 @@ namespace HeatDev.Controllers
 
         // GET: api/users/{id}/profile
         /// <summary> Get user profile </summary>
-        /// <response code="200"> tokens have been successfully refreshed </response>
+        /// <response code="200"> user profile </response>
         /// <response code="403"> wrong token </response>
         /// <response code="404"> user doesn't exist </response>
         [HttpGet("{userId:int}/profile")]
@@ -47,9 +47,9 @@ namespace HeatDev.Controllers
             return Ok(Mapper.Map<UserProfileVM>(profile));
         }
 
-        // GET: api/users/{id}/profile
+        // PUT: api/users/{id}/profile
         /// <summary> Change user's profile </summary>
-        /// <response code="200"> tokens have been successfully refreshed </response>
+        /// <response code="200"> profile updated </response>
         /// <response code="400"> invalid data </response>
         /// <response code="401"> need to atuhorize </response>
         /// <response code="403"> wrong token </response>
@@ -79,6 +79,13 @@ namespace HeatDev.Controllers
             return Ok();
         }
 
+        // PUT: api/users/{id}/password
+        /// <summary> Change user's password </summary>
+        /// <response code="200"> password changed </response>
+        /// <response code="400"> invalid data </response>
+        /// <response code="401"> need to atuhorize </response>
+        /// <response code="403"> wrong token </response>
+        /// <response code="404"> user doesn't exist </response>
         [HttpPut("{userId:int}/password")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromRoute]int userId, [FromBody] ChangePasswordDTO passwordData)

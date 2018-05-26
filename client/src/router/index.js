@@ -1,13 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import HomePage from '@/components/homePage'
-import SignUpPage from '@/components/users/signUp'
+
 import Orders from '@/components/orders/orders'
 import CreateOrder from '@/components/orders/createOrder'
 import OrderDetail from '@/components/orders/orderDetail'
-import CreateReview from '@/components/reviews/createReview'
 import ClientOrders from '@/components/orders/clientOrders'
+
+import SignUpPage from '@/components/users/signUp'
 import UserProfile from '@/components/users/userProfile'
+
+import CreateReview from '@/components/reviews/createReview'
+import Reviews from '@/components/reviews/reviews'
 
 Vue.use(Router)
 
@@ -52,6 +57,11 @@ export default new Router({
       path: '/profile',
       name: 'profile',
       component: UserProfile
+    },
+    {
+      path: '/reviews',
+      name: 'reviews',
+      component: Reviews
     }
   ]
 })

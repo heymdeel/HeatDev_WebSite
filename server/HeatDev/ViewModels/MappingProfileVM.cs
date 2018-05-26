@@ -20,6 +20,11 @@ namespace HeatDev.ViewModels
 
             CreateMap<Order, OrderWorkersListVM>();
             CreateMap<Order, ClientOrdersVM>();
+
+            CreateMap<UserProfile, UserReviewVM>();
+
+            CreateMap<Review, ReviewVM>()
+                .ForMember(vm => vm.UserProfile, r => r.MapFrom(u => u.Order.ClientProfile));
         }
     }
 }
