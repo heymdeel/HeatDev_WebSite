@@ -4,7 +4,7 @@
     <md-button @click="$router.push('/sign_up')">Регистрация</md-button>
     <md-button class="md-raised md-accent" @click="openSignInDialog()">Войти</md-button>
 
-    <md-dialog :md-active.sync="show_dialog" md-theme="default" @md-closed="onDialogClose">
+    <md-dialog :md-active.sync="show_dialog" md-theme="default">
         <md-dialog-title>Авторизация</md-dialog-title>
 
         <md-dialog-content>
@@ -75,12 +75,6 @@ export default {
     methods: {
         closeSignInDialog() {
             this.show_dialog = false;
-        },
-
-        onDialogClose() {
-            this.login = '';
-            this.password = '';
-            this.$validator.reset();
         },
 
         openSignInDialog() {

@@ -83,6 +83,7 @@
                     </md-field>
 
                     <md-field :class="{'md-invalid': errors.has('phone')}">
+                        <md-icon>phone</md-icon>
                         <label>Номер телефона</label>
                         <md-input required
                             maxlength="11"
@@ -97,6 +98,7 @@
                     </md-field>
 
                     <md-field md-clearable>
+                        <md-icon>insert_photo</md-icon>
                         <label>Аватар</label>
                         <md-file
                             id="avatar"

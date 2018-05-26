@@ -7,6 +7,7 @@ import CreateOrder from '@/components/orders/createOrder'
 import OrderDetail from '@/components/orders/orderDetail'
 import CreateReview from '@/components/reviews/createReview'
 import ClientOrders from '@/components/orders/clientOrders'
+import UserProfile from '@/components/users/userProfile'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/myorders',
       name: 'client_orders',
       component: ClientOrders
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: UserProfile
     }
   ]
 })

@@ -104,5 +104,16 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+
+    async updateUserProfile(id, profile) {
+        await auth.checkTokens();
+
+        try {
+            const response = await axios.put(`/api/users/${id}/profile`, profile);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 }

@@ -19,5 +19,9 @@ namespace HeatDevBLL.Services
         Task<bool> TokenIsValidAsync(int userId, string refreshToken);
         Task InvalidateTokenAsync(int userId, string refreshToken);
         Task StoreRefreshTokenAsync(User user, string refreshToken);
+
+        Task UpdateUserProfileAsync(UserProfile profile, UserProfileDTO newProfile);
+        Task ChangeUserPasswordAsync(User user, string password);
+        bool PasswordIsValidAsync(User user, string password);
     }
 }

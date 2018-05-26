@@ -13,8 +13,8 @@
             <md-menu-item @click="$router.push('/profile')">
                 <span>Мой профиль</span>
             </md-menu-item>
-            <md-menu-item @click="$router.push('/orders/my')">
-                <span>Мои заказы</span>
+            <md-menu-item @click="$router.push('/myorders')">
+                <span>Мои заявки</span>
             </md-menu-item>
             <md-divider></md-divider>
             <md-menu-item @click="signOut" >

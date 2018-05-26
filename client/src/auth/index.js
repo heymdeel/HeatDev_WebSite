@@ -153,6 +153,16 @@ export default {
           return true;
       },
 
+      async changePassword(userId, data) {
+        await this.checkTokens();
+
+        try {
+          const result = await axios.put(`/api/users/${userId}/password`, data);
+        } catch (error) {
+          throw error;
+        }
+      },
+
       userIsWorker() {
         return this.user.is_authenticated && this.user.roles.some(r => r == 'worker');
       },

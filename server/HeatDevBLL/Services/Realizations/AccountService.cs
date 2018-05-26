@@ -122,5 +122,31 @@ namespace HeatDevBLL.Services
 
             return sb.ToString();
         }
+
+        public async Task UpdateUserProfileAsync(UserProfile profile, UserProfileDTO newProfile)
+        {
+            profile.Avatar = newProfile.Avatar;
+            profile.Name = newProfile.Name;
+            profile.Surname = newProfile.Surname;
+            profile.Phone = newProfile.Phone;
+
+            using (var db = new DBContext())
+            {
+                await db.UpdateAsync(profile);
+            }
+        }
+
+        public async Task ChangeUserPasswordAsync(User user, string password)
+        {
+            string hash = GeneratePassword(user.Login, password);
+            user.Hash = hash;
+
+            using (var db = new DBContext())
+            {
+                await db.UpdateAsync(user);
+            }
+        }
+
+        public bool PasswordIsValidAsync(User user, string password) => user.Hash == GeneratePassword(user.Login, password);
     }
 }
