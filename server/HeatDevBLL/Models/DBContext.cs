@@ -35,7 +35,7 @@ namespace HeatDevBLL.Models
                     {
                         Name = "PostgresConfig",
                         ProviderName = "Npgsql",
-                        ConnectionString = "User ID=postgres; Password=359741268; Server=localhost; Port=5432; Database=heat_dev; Pooling=true;"
+                        ConnectionString = "User ID=postgres; Password=12345; Server=localhost; Port=5432; Database=heat_dev; Pooling=true;"
                     };
             }
         }
