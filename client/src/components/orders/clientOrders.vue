@@ -13,20 +13,9 @@
             class="order-card"
             v-for="order in sortedOrders" 
             :key="order.id">
-
                 <md-card-header style="{margin-left: 0;}">
-                    <md-avatar>
-                        <img :src="order.client.avatar" alt="client">
-                    </md-avatar> 
-
                     <md-card-header-text>
                         <div class="md-title">{{categoryName(order.category)}}</div>
-                        <div class="md-subhead">
-                        Заказчик: 
-                        <span class="link">
-                            {{order.client.name + ' ' + order.client.surname}}
-                        </span>
-                        </div>    
                     </md-card-header-text>
                 </md-card-header>
 
@@ -46,6 +35,17 @@
                     
                     <div class="flex-list">
                         <div class="md-subheading left-item">
+                            Дата диагностики: 
+                        </div>
+
+                        <div class="md-body-2 right-item">
+                            <md-icon>date_range</md-icon>
+                            {{formatDate(order.visit_time)}}
+                        </div>
+                    </div>
+
+                    <div class="flex-list">
+                        <div class="md-subheading left-item">
                             Статус: 
                         </div>
 
@@ -61,17 +61,6 @@
 
                         <div class="md-body-2 right-item">
                             {{order.address}}
-                        </div>
-                    </div>
-
-                    <div class="flex-list">
-                        <div class="md-subheading left-item">
-                            Контакнтый номер: 
-                        </div>
-
-                        <div class="md-body-2 right-item">
-                            <md-icon>phone</md-icon>
-                            {{order.client.phone}}
                         </div>
                     </div>
                 </md-card-content>
@@ -96,7 +85,7 @@ import api from '@/API'
 import {EventBus} from '@/EventBus'
 
 export default {
-    name: 'worker-orders',
+    name: 'client-orders',
     data() {
         return {
             user: auth.user,
@@ -202,7 +191,7 @@ export default {
             try {
                 this.error = null;
                 this.loading = true;
-                this.orders = await api.getAllOrders();
+                this.orders = await api.getClientOrders();
                 this.categories = await api.getCategories();
             } catch (error) {
                 const status = error.response.status;
@@ -287,5 +276,5 @@ export default {
     flex-basis: 50%;
     text-align: right;
 }
-
 </style>
+

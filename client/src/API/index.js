@@ -93,5 +93,16 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+
+    async getClientOrders() {
+        await auth.checkTokens();
+
+        try {
+            const response = await axios.get('/api/orders/my');
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 }

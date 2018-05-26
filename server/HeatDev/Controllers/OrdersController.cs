@@ -145,6 +145,25 @@ namespace HeatDev.Controllers
             return Ok(Mapper.Map<IEnumerable<OrderWorkersListVM>>(orders));
         }
 
+        // GET: api/orders/my
+        /// <summary> Get all client orders</summary>
+        /// <response code="200"> list of orders </response>
+        /// <response code="401"> need to authorize </response>
+        /// <response code="404"> orders were not found </response>
+        [HttpGet("my")]
+        [Authorize(Roles = "client")]
+        [ProducesResponseType(typeof(IEnumerable<ClientOrdersVM>), 200)]
+        public async Task<IActionResult> GetPersonalOrders()
+        {
+            var orders = await orderService.GetClientOrdersAsync(User.GetUserId());
+            if (orders == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(Mapper.Map<IEnumerable<ClientOrdersVM>>(orders));
+        }
+
         // GET: api/orders/categories
         /// <summary> Get all possible categories </summary>
         /// <response code="200"> list of categories </response>

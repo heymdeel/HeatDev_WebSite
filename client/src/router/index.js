@@ -6,6 +6,7 @@ import Orders from '@/components/orders/orders'
 import CreateOrder from '@/components/orders/createOrder'
 import OrderDetail from '@/components/orders/orderDetail'
 import CreateReview from '@/components/reviews/createReview'
+import ClientOrders from '@/components/orders/clientOrders'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/orders/:id/review',
       name: 'create_review',
       component: CreateReview
+    },
+    {
+      path: '/myorders',
+      name: 'client_orders',
+      component: ClientOrders
     }
   ]
 })

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -117,6 +118,14 @@ namespace HeatDevBLL.Services
             using (var db = new DBContext())
             {
                 await db.UpdateAsync(order);
+            }
+        }
+
+        public async Task<IEnumerable<Order>> GetClientOrdersAsync(int clientId)
+        {
+            using (var db = new DBContext())
+            {
+                return await db.Orders.Where(o => o.ClientId == clientId).ToListAsync();
             }
         }
     }

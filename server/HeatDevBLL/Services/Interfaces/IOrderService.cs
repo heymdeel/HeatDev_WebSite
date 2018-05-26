@@ -11,6 +11,8 @@ namespace HeatDevBLL.Services
     public interface IOrderService
     {
         Task<IEnumerable<Order>> GetAllOrdersWithClientsAsync();
+        Task<IEnumerable<Order>> GetClientOrdersAsync(int clientId);
+
         Task<Order> CreateOrderAsync(int userId, OrderCreateDTO orderData);
         Task<Order> FindOrderByIdAsync(int orderId);
 
